@@ -1,7 +1,7 @@
 package com.jin.myapplication;
 
 /**
- * Created by jinx9 on 2018-03-27.
+ * 모델 클래스
  */
 
 public class People {

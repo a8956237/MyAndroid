@@ -1,6 +1,7 @@
 package com.jin.myapplication;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class PeopleAdapter extends BaseAdapter {
 
+    private static final String TAG = PeopleAdapter.class.getSimpleName();
     private final List<People> mData;
     private final Context mContext;
 
@@ -45,11 +47,11 @@ public class PeopleAdapter extends BaseAdapter {
     // position번째의 레이아웃 완성해서 알려줘야 함
     // convertView - position번째의 레이아웃의 레퍼런스
     // parent 이 어댑터가 붙을 부모의 레퍼런스 (ListView나 GridView)
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
+            Log.d(TAG, "getView: getView 최초 : " +position);
             // 최초
             convertView = LayoutInflater.from(mContext)
                     .inflate(R.layout.item_exam, parent, false);
@@ -66,6 +68,7 @@ public class PeopleAdapter extends BaseAdapter {
             convertView.setTag(holder);
         } else {
             // 재사용
+            Log.d(TAG, "getView: 재사용"+ position);
             holder = (ViewHolder) convertView.getTag();
         }
 
