@@ -1,9 +1,11 @@
 package com.jin.myapplication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -135,23 +137,48 @@ public class AdapterViewExamActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.action_item1:
                 Toast.makeText(this, "액션 1", Toast.LENGTH_SHORT).show();
-                // 삭제
-                mPeopleData.remove(info.position);
-                // 업데이트
-                mAdapter.notifyDataSetChanged(); // Best!!!
+
+                // 물어보자 AlertDialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(AdapterViewExamActivity.this);
+                builder.setTitle("삭제");
+                builder.setMessage("정말로 삭제하시겠습니까?");
+                // 바깥 부분 클릭했을 때 막기
+                builder.setCancelable(false); // 바깥클릭해도 안닫히게
+                builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // dialog : 눌린객체,  i : 아이템 클릭 position번째
+                        Log.d(TAG, "onClick: " + i);
+                        // 삭제
+                        mPeopleData.remove(info.position);
+                        // 업데이트
+                        mAdapter.notifyDataSetChanged(); // Best!!!
 //                mListView.setAdapter(new PeopleAdapter(this, mPeopleData));
 //                mListView.setAdapter(mAdapter);
+                    }
+                });
+
+                builder.setNegativeButton("아니오", null); // 보통 아무처리안해도됨.
+                builder.setIcon(R.drawable.miku);
+
+                builder.create().show();
+
                 return true;
             case R.id.action_item2:
-                Toast.makeText(this, "액션 2", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "액션 2", Toast.LENGTH_SHORT).
+
+                        show();
                 return true;
             default:
-                return super.onContextItemSelected(item);
+                return super.
+
+                        onContextItemSelected(item);
         }
+
     }
 
     // 뒤로 가기 onBackPressed 하기전에 저장
