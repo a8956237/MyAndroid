@@ -1,7 +1,9 @@
 package com.jin.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -10,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -23,6 +26,7 @@ public class AdapterViewExamActivity extends AppCompatActivity {
     private String TAG = AdapterViewExamActivity.class.getSimpleName();
     private PeopleAdapter mAdapter;
     private ListView mListView;
+    private EditText mWeatherEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,14 @@ public class AdapterViewExamActivity extends AppCompatActivity {
 
         // Context 메뉴 연결
         registerForContextMenu(mListView);
+
+        // SharedPreference 데이터 복원
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String weather = settings.getString("weather", "맑음");
+
+        mWeatherEditText = findViewById(R.id.weather_edit);
+        mWeatherEditText.setText(weather);
+
     }
 
     @Override
@@ -140,5 +152,20 @@ public class AdapterViewExamActivity extends AppCompatActivity {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    // 뒤로 가기 onBackPressed 하기전에 저장
+    @Override
+    public void onBackPressed() {
+        // 저장
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("weather", mWeatherEditText.getText().toString());
+
+        // 비동기
+        editor.apply();
+
+        // 뒤로 가기
+        super.onBackPressed();
     }
 }
